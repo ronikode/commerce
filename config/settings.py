@@ -134,3 +134,16 @@ STATIC_ROOT = ""    # Path for pro
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '' # Path for pro
+
+# CONFIG EMAIL
+if DEBUG:   # desarrollo
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_HOST_USER = 'username'
+    EMAIL_HOST = 'smtp.domain.com'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_PASSWORD = 'password'
+else:
+    # TODO: Configuracion del servidor de correo
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'   # EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend' 
+    
