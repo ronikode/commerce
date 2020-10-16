@@ -10,7 +10,6 @@ class ContactForm(forms.Form):
 		"""
 		Funcion que envia un correo electronico al usuario
 		"""
-		print("Enviando email al cliente")
 		message = f"De: {self.cleaned_data['name']} \n {self.cleaned_data['message']}"
 		send_mail(
 			"Commerce",
@@ -19,4 +18,3 @@ class ContactForm(forms.Form):
 			["support@commerce.com"],
 			fail_silently=False,
 		)
-		print("Despues del envio del correo")

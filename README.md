@@ -24,3 +24,10 @@
  - Product.objects.filter(name__icontains="Laptop") => Devuelve todos los productos llamados Laptop.
  - Product.objects.filter(category=2)	==> Devuelve todos los productos de la categoria con id=2.
 
+### Django sessions
+- MIDDLEWARE (django.contrib.sessions.middleware.SessionMiddleware)
+
+	request.session["cart"] = 'asdadasd1'
+
+	del request.session['cart']
+
