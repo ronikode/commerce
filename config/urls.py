@@ -24,4 +24,5 @@ urlpatterns = [
 
     path('tienda/', include('shop.urls', namespace="shop")),    # Declara las urls de la aplicacion shop
     path('', include('main.urls', namespace="main")),
+    path('cart/', include('carts.urls', namespace="carts")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

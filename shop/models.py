@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Category(models.Model):
@@ -17,6 +18,14 @@ class Category(models.Model):
 		verbose_name = "Categoría"	# singular
 		verbose_name_plural = "Categorías"	# categorías
 		db_table = "categoria"	# si no uso el db_table => <nombre_app>_category o shop_category
+	
+
+	def get_absolute_url(self):	# Obtiene la url del modelo, ejemplo: categoria a => /categorias/1/
+		return reverse(
+			"shop:category", 
+			args=[self.pk]
+		)
+	
 
 
 class Product(models.Model):
@@ -41,6 +50,13 @@ class Product(models.Model):
 	
 	def __str__(self):
 		return f"{self.name}"
+
+	@property	# Decorador 	
+	def main_image(self):
+		if  self.images.first():
+			return self.images.first().photo.url	# /images/laptop.jpg
+		else:
+			return None
 
 
 class ProductImage(models.Model):

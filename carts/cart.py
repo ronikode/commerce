@@ -1,4 +1,4 @@
-
+from decimal import Decimal
 from shop.models import Product
 
 class Cart:
@@ -16,18 +16,18 @@ class Cart:
 		"""
 		Iterate los items del carrito y obtener productos
 		"""
-
 		product_ids = self.cart.keys() # -> Lista de la clave de dicho diccionario
 		products = Product.objects.filter(id__in=list(product_ids))	# <atributo>__in=[2,3,4] ( debe ser una lista)
-
 		cart_copy = self.cart.copy()	# Dict
-
 		for product in products:
 			cart_copy[str(product.id)]['product'] = product
 		
 		for item in cart_copy.items():
-			item['price'] = item['price']
-			item['subtotal'] = item['price'] * item['quantity']
+			price = item[1].get('price')
+			qty = item[1].get('quantity')
+			item[1]['price'] = price
+			item[1]['subtotal'] = price * qty
+			yield item
 	
 	def __len__(self):
 		"""Cantidad de items en el carrito"""
@@ -39,13 +39,13 @@ class Cart:
 	
 	def add(self, product, qty=1, edit_qty=False):
 		"""
-		Agraga product al carrito y su cantidad
+		Agraga producto al carrito y su cantidad
 		"""
 		product_id = str(product.id)
-
 		if product_id not in self.cart:
 			self.cart[product_id] = {
-				"quantity": 0, "price": str(product.price)
+				"quantity": 0, 
+				"price": str(product.price)
 			}
 		
 		if edit_qty:
@@ -70,3 +70,6 @@ class Cart:
 		if product_id in self.cart:
 			del self.cart[product_id]
 			self.save()
+	
+	def get_total_subtotal(self):
+		return sum(Decimal(item.get("price")) * item.get('quantity') for item in self.cart.values())

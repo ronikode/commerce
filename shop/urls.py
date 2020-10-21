@@ -10,5 +10,6 @@ app_name="shop"
 urlpatterns = [
 	path("productos/", product_list, name="products"),
 	# path("productos/catalogo/", ProductsListView.as_view(), name="products_list"),
+	# path("productos/categoria/<>", )
 	path("productos/<int:pk>/", ProductDetailView.as_view(), name="products_detail")
 ]

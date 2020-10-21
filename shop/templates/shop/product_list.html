@@ -4,10 +4,13 @@
     <div class="col-lg-3">
 
         <h1 class="my-4">Tienda</h1>
-        <div class="list-group">
-            {% for category in categories %} <a href="#" class="list-group-item">{{ category.name }}</a> {% endfor %}
-        </div>
-
+            <div class="list-group">
+                {% for category in categories %} 
+                    <a href="{{ category.get_absolute_url }}" class="list-group-item">
+                        {{ category.name }}
+                    </a> 
+                {% endfor %}
+            </div>
     </div>
     <!-- /.col-lg-3 -->
 
@@ -42,13 +45,13 @@
 
         <div class="row">
             {% for product in products %}
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100">
-                        <a href="{% url 'shop:products_detail' product.pk %}">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <a href="{% url 'shop:products_detail' product.pk %}">
 
                             {% if product.images.exists %}
                                 <img class="card-img-top" 
-                                    src="{{ product.images.first.photo.url }}" 
+                                    src="{{ product.main_image }}" 
                                     alt="{{ product.name }}" />
                             {% else %}
                                 <img class="card-img-top" 
@@ -57,17 +60,20 @@
 
                         </a>
 
-                        <div class="card-body">
-                            <h4 class="card-title">
-                                <a href="#">{{product.name}}</a>
-                            </h4>
-                            <h5>${{product.price}}</h5>
-                            <p class="card-text">{{product.description}}</p>
-                        </div>
-                        <div class="card-footer">
-                        </div>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            {# TODO: implement in model #}
+                            <a href="#">
+                                {{ product.name }}
+                            </a>
+                        </h4>
+                        <h5>${{product.price}}</h5>
+                        <p class="card-text">{{product.description}}</p>
+                    </div>
+                    <div class="card-footer">
                     </div>
                 </div>
+            </div>
             {% endfor %}
         </div>
         <!-- /.row -->

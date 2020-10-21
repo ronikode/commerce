@@ -1,3 +1,4 @@
+from carts.forms import CartAddProductForm
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
@@ -34,6 +35,15 @@ class ProductDetailView(DetailView):	# CreateView, UpdateView, DeleteView, ListV
 	model = Product
 	template_name = "shop/product_detail.html"
 	context_object_name = "product"		# Atributo que indica el nombre de la variable que representa el objeto
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		cart_product_form = CartAddProductForm()
+
+		context["cart_product_form"] = cart_product_form
+		context["title"] = "Detalle del producto en la vista de clase"
+		return context
+
 
 class ProductsListView(ListView):
 	"""

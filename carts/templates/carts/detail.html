@@ -1,0 +1,41 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Carrito compras{% endblock %} {% block content %}
+<h1>Carrito</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Eliminar</th>
+            <th>Precio U.</th>
+            <th>Sub Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %} 
+        {% with product=item.product %}
+        <tr>
+            <td>
+                <a href="#">
+                    {% if product.main_image %}
+                        <img src="{{ product.main_image }}" alt="{{ product.name }}" width=200 height=200 />
+                    {% else %}
+                        <img src="{% static 'images/no_imagen.jpg' %}" alt="No tiene imagen" />	
+                    {% endif %}
+                </a>
+            </td>
+            <td>{{ product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>
+                <form action="{% url 'carts:cart_remove' product.id %}" method="post">{% csrf_token %}
+                    <input type="submit" value="Eliminar">
+                </form>
+            </td>
+            <td>${{ product.price }}</td>
+            <td></td>
+            {% comment %} <td>${{ item.subtotal }}</td> {# price * quantity #} {% endcomment %}
+        </tr>
+        {% endwith %} {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

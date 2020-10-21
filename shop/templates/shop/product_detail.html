@@ -1,15 +1,36 @@
-{% extends "base.html" %}
-{% block title %}Detalle producto{% endblock %}
+{% extends "base.html" %} 
+{% load static %}
+
+{% block title %}Detalle producto {{producto.name}} {% endblock %} 
+
 
 {% block content %}
-	<div class="row">
 
+	<div class="container">
+		<div class="pt-5">
+			{# Validar si existe foto presentarla o colocar un placeholder #}
+			{% if product.main_image %}
+				<img src="{{ product.main_image }}" alt="{{ product.name }}" width=200 height=200 />
+			{% else %}
+				<img src="{% static 'images/no_imagen.jpg' %}" alt="No tiene imagen" />	
+			{% endif %}
+			<h1>{{ product.name }}</h1>
+			<h2>
+				<a href="#">
+					{{ product.category }}
+				</a>
+			</h2>
+			<p class="price">${{ product.price }}</p>
 
-		<section class="col-12">
-			<h1> {{ product.name}} </h1>
-		</section>
-		
-		<p>{{ product.description }}</p>
-		
+			{# formulario de cantidad para agregar al carrito #}
+			<form action="{% url 'carts:cart_add' product.id %}" method="post">{% csrf_token %}
+				{{ cart_product_form }} 
+				<br>
+				{{ title }}
+				<input type="submit" value="Agregar al carrito" />
+			</form>
+
+			{{ product.description|linebreaks }}	{# Template filter de django que permite parrafos salto de lineas #}
+		</div>
 	</div>	
 {% endblock %}
