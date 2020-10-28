@@ -22,8 +22,7 @@ SECRET_KEY = '2z#mb(6i0yz5hect7vzmxjh-odtv6dj6s9*w$m0u210cyhnzmm'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*'] # Que todos los hosts sean permitidos
-
+ALLOWED_HOSTS = ['*']  # Que todos los hosts sean permitidos
 
 # Application definition
 
@@ -35,18 +34,24 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Third app
+    'crispy_forms',
+
     # Custom app
     'shop',
     'main',
     'order',
     'carts',
+    'coupons',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware', 
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -54,12 +59,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            str(BASE_DIR) + '/config/templates/' 
+            str(BASE_DIR) + '/config/templates/'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -68,14 +72,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'carts.context_processors.cart'
             ],
         },
     },
 ]
 
-
 WSGI_APPLICATION = 'config.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -83,14 +86,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'commerce_db',       # Nombre de la base de datos
-        'USER': 'postgres',   # Usuario del servicio de la base de datos  (postgres)
-        'PASSWORD': '123456',   # Clave del servicio 
-        'HOST': '127.0.0.1',        # Ip del servicio de base de datos
-        'PORT': '5432',             
+        'NAME': 'commerce_db',  # Nombre de la base de datos
+        'USER': 'postgres',  # Usuario del servicio de la base de datos  (postgres)
+        'PASSWORD': '123456',  # Clave del servicio
+        'HOST': '127.0.0.1',  # Ip del servicio de base de datos
+        'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -110,7 +112,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -124,20 +125,19 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     str(BASE_DIR) + '/config/static/',
 ]
-STATIC_ROOT = ""    # Path for pro
+STATIC_ROOT = ""  # Path for pro
 
 # Media files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '' # Path for pro
+MEDIA_ROOT = ''  # Path for pro
 
 # CONFIG EMAIL
-if DEBUG:   # desarrollo
+if DEBUG:  # desarrollo
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     EMAIL_HOST_USER = 'username'
     EMAIL_HOST = 'smtp.domain.com'
@@ -146,5 +146,5 @@ if DEBUG:   # desarrollo
     EMAIL_HOST_PASSWORD = 'password'
 else:
     # TODO: Configuracion del servidor de correo
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'   # EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend' 
-    
+    # EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

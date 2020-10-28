@@ -1,7 +1,11 @@
-{% extends 'base.html' %} {% load static %} {% block title %}Carrito compras{% endblock %} {% block content %}
-<h1>Carrito</h1>
-<table class="table">
-    <thead>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Carrito compras{% endblock %}
+
+{% block content %}
+    <h1>Carrito</h1>
+    <table class="table" style="margin-top: 5%;">
+        <thead>
         <tr>
             <th></th>
             <th>Producto</th>
@@ -10,32 +14,75 @@
             <th>Precio U.</th>
             <th>Sub Total</th>
         </tr>
-    </thead>
-    <tbody>
-        {% for item in items %} 
-        {% with product=item.product %}
-        <tr>
-            <td>
-                <a href="#">
-                    {% if product.main_image %}
-                        <img src="{{ product.main_image }}" alt="{{ product.name }}" width=200 height=200 />
-                    {% else %}
-                        <img src="{% static 'images/no_imagen.jpg' %}" alt="No tiene imagen" />	
-                    {% endif %}
-                </a>
-            </td>
-            <td>{{ product.name }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>
-                <form action="{% url 'carts:cart_remove' product.id %}" method="post">{% csrf_token %}
-                    <input type="submit" value="Eliminar">
-                </form>
-            </td>
-            <td>${{ product.price }}</td>
-            <td></td>
-            {% comment %} <td>${{ item.subtotal }}</td> {# price * quantity #} {% endcomment %}
-        </tr>
-        {% endwith %} {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        {% for item in items %}
+            {% with product=item.product %}
+                <tr>
+                    <td>
+                        <a href="#">
+                            {% if product.main_image %}
+                                <img src="{{ product.main_image }}" alt="{{ product.name }}" width=200 height=200/>
+                            {% else %}
+                                <img src="{% static 'images/no_imagen.jpg' %}" alt="No tiene imagen"/>
+                            {% endif %}
+                        </a>
+                    </td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>
+                        <form action="{% url 'carts:cart_remove' product.id %}" method="post">{% csrf_token %}
+                            <input type="submit" value="Eliminar">
+                        </form>
+                    </td>
+                    <td>${{ product.price }}</td>
+                    <td>${{ item.subtotal }}</td>
+                </tr>
+            {% endwith %}
+        {% endfor %}
+
+        {% if cart.coupon %}
+            <tr class="subtotal">
+                <td>SUBTOTAL</td>
+                <td colspan="4"></td>
+                <td>${{ cart.get_total_subtotal }}</td>
+            </tr>
+            <tr>
+                <td>"{{ cart.coupon.code }}" cupon {{ cart.coupon.discount }}% descuento</td>
+                <td colspan="4"></td>
+                <td style="color: red">-${{ cart.get_discount|floatformat:2 }}</td>
+            </tr>
+            <tr class="total">
+                <td>Total</td>
+                <td colspan="4"></td>
+                <td>${{ cart.get_total_price_after_discount|floatformat:2 }}</td>
+            </tr>
+        {% else %}
+            <tr class="total">
+                <td>Total</td>
+                <td colspan="4"></td>
+                <td>${{ cart.get_total_subtotal|floatformat:2 }}</td>
+            </tr>
+        {% endif %}
+
+        </tbody>
+    </table>
+
+    <div class="py-2">
+        <h3>Aplicar un cupon:</h3>
+        <form action="{% url 'coupons:apply' %}" method="post">{% csrf_token %}
+            {{ coupon_apply_form }}
+            <input type="submit" value="Aplicar" class="btn btn-warning"/>
+        </form>
+    </div>
+
+    <section class="text-right">
+        <a href="/" class="btn btn-primary">
+            Continuar comprando
+        </a>
+        <a href="{% url 'order:create_order' %}" class="btn btn-secondary">
+            Crear Orden
+        </a>
+    </section>
+
 {% endblock %}
